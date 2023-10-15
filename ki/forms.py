@@ -15,8 +15,8 @@ class PersonalInfoForm(forms.ModelForm):
         exclude = ['user']
 
     # Additional fields for PersonalInfo
-    umur = forms.IntegerField(label='Umur')
-    tanggal_lahir = forms.DateField(label='Tanggal Lahir')
+    umur = forms.IntegerField(label='Age')
+    tanggal_lahir = forms.DateField(label='Birthdate')
 
 class MedicalInfoForm(forms.ModelForm):
     class Meta:
@@ -25,7 +25,7 @@ class MedicalInfoForm(forms.ModelForm):
 
     # Additional fields for MedicalInfo
     informasi_pekerjaan = forms.CharField(widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
-    informasi_medis_file = forms.FileField(label='Upload Informasi Medis', required=False, widget=forms.FileInput)
+    informasi_medis_file = forms.FileField(label='Upload Medical Information', required=False, widget=forms.FileInput)
 
 class BiometricDataForm(forms.ModelForm):
     class Meta:
@@ -33,4 +33,8 @@ class BiometricDataForm(forms.ModelForm):
         exclude = ['user']
 
     # Additional fields for BiometricData
+<<<<<<< HEAD
     sidik_jari_image = forms.ImageField(label='Upload Gambar Sidik Jari', widget=forms.FileInput)
+=======
+    sidik_jari_image = forms.ImageField(label='Upload Fingerprint', widget=forms.FileInput)
+>>>>>>> b52bc651f538e7770af7d97f60ca23cbb353e48a

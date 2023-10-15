@@ -9,6 +9,16 @@ class User(models.Model):
     def __str__(self):
         return self.username
 
+def validate_file_extension(value):
+    import os
+    from django.core.exceptions import ValidationError
+
+    ext = os.path.splitext(value.name)[1]  # Get the file extension
+    valid_extensions = ['.pdf', '.xls', '.doc']
+
+    if not ext.lower() in valid_extensions:
+        raise ValidationError("Unsupported file type. Please upload a PDF, XLS, or DOC file.")
+
 
 class PersonalInfo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -28,8 +38,9 @@ class MedicalInfo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     informasi_pekerjaan = models.TextField()  # Informasi pekerjaan saat ini
     informasi_medis_file = models.FileField(
-        upload_to="medical_info/"
-    )  # Kolom untuk file informasi medis (pdf, xls, doc)
+        upload_to="medical_info/",
+        validators=[validate_file_extension]
+    )  
 
 
 class BiometricData(models.Model):
