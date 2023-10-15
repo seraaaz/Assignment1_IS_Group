@@ -23,7 +23,7 @@ def upload_data(request):
         user_form = UserForm(request.POST, request.FILES)
         personal_info_form = PersonalInfoForm(request.POST)
         medical_info_form = MedicalInfoForm(request.POST, request.FILES)
-        biometric_data_form = BiometricDataForm(request.POST, request.FILES)
+        biometric_data_form = BiometricDataForm(request.POST, request.FILES) 
 
         if (user_form.is_valid() and personal_info_form.is_valid() and medical_info_form.is_valid() and biometric_data_form.is_valid()):
 
