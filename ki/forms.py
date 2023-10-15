@@ -32,9 +32,5 @@ class BiometricDataForm(forms.ModelForm):
         model = BiometricData
         exclude = ['user']
 
-    # Additional fields for BiometricData
-<<<<<<< HEAD
-    sidik_jari_image = forms.ImageField(label='Upload Gambar Sidik Jari', widget=forms.FileInput)
-=======
+    # Additional fields for BiometricDatag
     sidik_jari_image = forms.ImageField(label='Upload Fingerprint', widget=forms.FileInput)
->>>>>>> b52bc651f538e7770af7d97f60ca23cbb353e48a
