@@ -1,9 +1,44 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from hashfunctions import cryptoHasher
+from django.contrib.auth.models import PermissionsMixin
+
+EncryptionAlgo = "ARC4"
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, username, password=None, id_card_image=None):
+        if not username:
+            raise ValueError('The Username field must be set')
+
+        user = self.model(username=username)
+        user.set_password(password)
+        user.save()
+        
+        if (id_card_image != None):
+            hasher = cryptoHasher.Hasher()
+            user.id_card_image = hasher.encryptFile(id_card_image, EncryptionAlgo, key=user.password)
+        user.save()
+
+        return user
+
+    def create_superuser(self, username, password):
+        user = self.create_user(username=username, password=password)
+        user.is_staff = True
+        user.is_superuser = True
+        user.save(using=self._db)
+        return user
 
 
-class User(models.Model):
-    username = models.CharField(max_length=100)
+class User(AbstractBaseUser, PermissionsMixin):
+    REQUIRED_FIELDS = ('user',)
+
+    USERNAME_FIELD = 'username'
+    objects = CustomUserManager()
+
+    username = models.CharField(max_length=100, unique=True)
     password = models.CharField(max_length=100)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
     id_card_image = models.ImageField(upload_to="id_cards/")
 
     def __str__(self):
@@ -23,7 +58,7 @@ def validate_file_extension(value):
 
 
 class PersonalInfo(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     Full_Name = models.CharField(max_length=255)
     Address = models.TextField()
     ID_Number = models.CharField(max_length=20)
@@ -37,7 +72,7 @@ class PersonalInfo(models.Model):
 
 
 class MedicalInfo(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     Job_Information = models.TextField()  # Informasi pekerjaan saat ini
     informasi_medis_file = models.FileField(
         upload_to="medical_info/", validators=[validate_file_extension]
@@ -45,7 +80,7 @@ class MedicalInfo(models.Model):
 
 
 class BiometricData(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     sidik_jari_image = models.ImageField(
         upload_to="biometric_data/"
     )  # Kolom untuk sidik jari (image)

@@ -4,9 +4,13 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import UserForm, PersonalInfoForm, MedicalInfoForm, BiometricDataForm
 from hashfunctions import cryptoHasher
-from django.contrib.auth.models import User
+from .models import User
+from django.core.files.storage import default_storage
+import os
+from django.http import HttpResponse
+import datetime
 
-EncryptionAlgo = "AES"
+EncryptionAlgo = "ARC4"
 
 hasher = cryptoHasher.Hasher()
 
@@ -15,30 +19,56 @@ def login_view(request):
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
+        print(username, password)
+
 
         user = authenticate(request, username=username, password=password)
-
+        print(user)
         if user is not None:
             login(request, user)
-            return redirect("upload_data")
+            return redirect("download_data")
         else:
             messages.error(request, "Invalid username or password. Please try again.")
 
     return render(request, "ki/login.html")
 
 def download_data(request):
-    if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
+    if request.user.is_authenticated:
+        current_user = request.user
 
-        user = User.objects.get(username=username)
+        # get the user's data
+        personal_info = User.objects.get(username=current_user.username).personalinfo
+        medical_info = User.objects.get(username=current_user.username).medicalinfo
+        biometric_data = User.objects.get(username=current_user.username).biometricdata
+        
+        # decrypt the files
+        id_card_image, id_card_image_path = hasher.decryptFile(current_user.id_card_image.path, EncryptionAlgo, key=current_user.password)
+        informasi_medis_file, informasi_medis_file_path = hasher.decryptFile(medical_info.informasi_medis_file.path, EncryptionAlgo, key=current_user.password)
+        sidik_jari_image, sidik_jari_image_path = hasher.decryptFile(biometric_data.sidik_jari_image.path, EncryptionAlgo, key=current_user.password)
 
-        if hasher.Check_Password(password, user.password.encode()):
-           pass
+        # return view with the data
+
+        # DOWNLOAD THE FILES
+        response = HttpResponse(id_card_image, content_type="application/vnd.ms-excel")
+        response['Content-Disposition'] = 'inline; filename=' + os.path.basename(id_card_image_path)
+        return response
+
+        # return render(
+        #     request,
+        #     "ki/download_data.html",
+        #     {
+        #         "personal_info": personal_info,
+        #         "medical_info": medical_info,
+        #         "biometric_data": biometric_data,
+        #     },
+        # )
+    else:
+        return redirect("login")
        
 
 def upload_data(request):
     if request.method == "POST":
+        now = datetime.datetime.now()
         user_form = UserForm(request.POST, request.FILES)
         personal_info_form = PersonalInfoForm(request.POST)
         medical_info_form = MedicalInfoForm(request.POST, request.FILES)
@@ -47,14 +77,17 @@ def upload_data(request):
         if (user_form.is_valid() and personal_info_form.is_valid() and medical_info_form.is_valid() and biometric_data_form.is_valid()):
 
             # Save User data
-            user = user_form.save(commit=False)
-            user.password = hasher.Hash_Password(user.password).decode()      
-            user.save()
+            username = user_form.cleaned_data['username']
+            password = user_form.cleaned_data['password']
+            file = request.FILES['id_card_image']
 
+            file_name = default_storage.save("id_cards/" + file.name, file)
+            print("File Name: ", file_name)
 
-            user.id_card_image = hasher.encryptFile(user.id_card_image.path, EncryptionAlgo, key=user.password)
-            user.save()
-            print("User ID Card Image Path: ", user.id_card_image.path)
+            path_to_file =  os.path.abspath("media/" + file_name)
+            print("Path to File: ", path_to_file)
+
+            user = User.objects.create_user(username=username, password=password, id_card_image=path_to_file)
            
 
             # Save PersonalInfo data with the related User instance
@@ -84,7 +117,8 @@ def upload_data(request):
             hasher.deleteFile(medical_info.informasi_medis_file.path, ".pdf")
             hasher.deleteFile(biometric_data.sidik_jari_image.path, '.jpg')
 
-
+            deltatime = datetime.datetime.now() - now
+            print("Delta Time: ", deltatime.total_seconds())
             return redirect("upload_success")  # Replace with your success URL.
 
     else:

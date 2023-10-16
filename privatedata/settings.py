@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-%3a0u!t+eo8_wj#k86ai_adr-5o+(&84qt125i2mvoy-zrj9&d
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['f80c-202-80-216-203.ngrok-free.app']
+ALLOWED_HOSTS = ['198.211.99.20', 'localhost', '127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = ['https://f80c-202-80-216-203.ngrok-free.app']
 
@@ -55,6 +55,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "privatedata.urls"
+
+AUTHENTICATION_BACKENDS = (
+    'ki.backends.CustomUserBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 
 TEMPLATES = [
     {
@@ -129,5 +135,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = "ki.User"
 
 LOGIN_REDIRECT_URL = "/"

@@ -3,6 +3,6 @@ from . import views
 
 urlpatterns = [
     path("upload_data/", views.upload_data, name="upload_data"),
-    # path("login/", ),
-    path("/", include("django.contrib.auth.urls"),views.login_view, name="login"),
+    path('login/', views.login_view, name='login'),
+    path('download_data/', views.download_data, name='download_data'),
 ]

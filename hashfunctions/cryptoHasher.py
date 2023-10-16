@@ -32,8 +32,8 @@ class Hasher():
     def encryptFile(self, fpath, algo, key = '1234567890123456'):
         # get file directiory without the extension
         key = self.get128BitKey(key)
-
         encrypted_path = path.splitext(fpath)[0] + ".enc"
+        print("Encrypted Path: ", encrypted_path)
         with open(fpath, "rb") as f:
             data = f.read()
         if(algo == "DES"):
@@ -59,16 +59,16 @@ class Hasher():
             data = f.read()
         if(algo == "DES"):
             decryped = self.DES_Decrypt(key, data)
-            self.saveFile(decrypted_path, decryped)
-            return decrypted_path
+            # self.saveFile(decrypted_path, decryped)
+            return decryped, decrypted_path
         elif(algo == "AES"):
             decryped = self.AES_Decrypt(key, data)
-            self.saveFile(decrypted_path, decryped)
-            return decrypted_path
+            # self.saveFile(decrypted_path, decryped)
+            return decryped, decrypted_path
         elif(algo == "ARC4"):
             decryped = self.ARC4_Decrypt(key, data)
-            self.saveFile(decrypted_path, decryped)
-            return decrypted_path
+            # self.saveFile(decrypted_path, decryped)
+            return decryped, decrypted_path
         else:
             return None
         
