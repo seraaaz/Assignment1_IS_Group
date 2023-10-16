@@ -8,14 +8,11 @@
     <h1>Upload Data</h1>
 
     <form method="post" enctype="multipart/form-data">
-      {% csrf_token %} 
-      {{ user_form.as_p }} 
-      {{ personal_info_form.as_p }}
-      {{ medical_info_form.as_p}}
-      {{ biometric_data_form.as_p}}
+      {% csrf_token %} {{ user_form.as_p }} {{ personal_info_form.as_p }} {{
+      medical_info_form.as_p}} {{ biometric_data_form.as_p}}
 
       <!-- Input teks -->
-   
+
       <!-- Tanggal Lahir input -->
 
       <!-- Informasi Pekerjaan input -->
@@ -51,5 +48,6 @@
       <!-- Tombol Submit -->
       <button type="submit">Submit</button>
     </form>
+    <p>Already have an account? <a href="{% url 'login' %}">Log in here</a></p>
   </body>
 </html>

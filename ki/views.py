@@ -1,4 +1,7 @@
-from django.shortcuts import render, redirect  # Add this import
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from .forms import UserForm, PersonalInfoForm, MedicalInfoForm, BiometricDataForm
 from hashfunctions import cryptoHasher
 from django.contrib.auth.models import User
@@ -8,6 +11,21 @@ EncryptionAlgo = "AES"
 hasher = cryptoHasher.Hasher()
 
 # Your view remains the same
+def login_view(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect("upload_data")
+        else:
+            messages.error(request, "Invalid username or password. Please try again.")
+
+    return render(request, "ki/login.html")
+
 def download_data(request):
     if request.method == "POST":
         username = request.POST.get("username")
@@ -17,6 +35,7 @@ def download_data(request):
 
         if hasher.Check_Password(password, user.password.encode()):
            pass
+       
 
 def upload_data(request):
     if request.method == "POST":
@@ -86,5 +105,8 @@ def upload_data(request):
         
         
     )
+    
+    
+    
     
     
