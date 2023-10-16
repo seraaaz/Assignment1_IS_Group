@@ -4,7 +4,7 @@ from django.db import models
 class User(models.Model):
     username = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
-    ID_Card_Image = models.ImageField(upload_to="id_cards/")
+    id_card_image = models.ImageField(upload_to="id_cards/")
 
     def __str__(self):
         return self.username
@@ -25,7 +25,7 @@ def validate_file_extension(value):
 class PersonalInfo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     Full_Name = models.CharField(max_length=255)
-    Address = models.TextField()
+    Address = models.TextField(max_length=255)
     ID_Number = models.CharField(max_length=20)
     Phone = models.CharField(max_length=15)
     Email = models.EmailField()
