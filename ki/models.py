@@ -4,7 +4,7 @@ from django.db import models
 class User(models.Model):
     username = models.CharField(max_length=100)
     password = models.CharField(max_length=100)
-    id_card_image = models.ImageField(upload_to="id_cards/")
+    ID_Card_Image = models.ImageField(upload_to="id_cards/")
 
     def __str__(self):
         return self.username
@@ -24,11 +24,11 @@ def validate_file_extension(value):
 
 class PersonalInfo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    nama = models.CharField(max_length=255)
-    alamat = models.TextField()
-    no_ktp_paspor = models.CharField(max_length=20)
-    no_telepon = models.CharField(max_length=15)
-    email = models.EmailField()
+    Full_Name = models.CharField(max_length=255)
+    Address = models.TextField()
+    ID_Number = models.CharField(max_length=20)
+    Phone = models.CharField(max_length=15)
+    Email = models.EmailField()
     umur = models.PositiveIntegerField()  # Kolom untuk umur
     tanggal_lahir = models.DateField()  # Kolom untuk tanggal lahir
 
@@ -38,7 +38,7 @@ class PersonalInfo(models.Model):
 
 class MedicalInfo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    informasi_pekerjaan = models.TextField()  # Informasi pekerjaan saat ini
+    Job_Information = models.TextField()  # Informasi pekerjaan saat ini
     informasi_medis_file = models.FileField(
         upload_to="medical_info/", validators=[validate_file_extension]
     )

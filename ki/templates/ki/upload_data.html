@@ -7,6 +7,9 @@
   href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 />
 
+<!-- <link rel="stylesheet" href="{% static 'styles.css' %}"> -->
+
+
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <meta charset="UTF-8" />
@@ -32,7 +35,7 @@
     
 
    .container .form-group p{
-    font-size: 16px; /* Ganti dengan ukuran font yang Anda inginkan */
+    font-size: 16px; 
 
    } 
 </style>
@@ -47,8 +50,9 @@
   <form method="post" enctype="multipart/form-data">
       {% csrf_token %} 
 
+    
     <div class="form-group">
-      {{ user_form.as_p }}
+       {{ user_form.as_p }}
     
     </div>
     
@@ -75,15 +79,6 @@
 </div>
 
 
-
-      <!-- {{ user_form.as_p }}  -->
-      <!-- {{ personal_info_form.as_p }} -->
-      <!-- {{ medical_info_form.as_p}} -->
-      <!-- {{ biometric_data_form.as_p}} -->
-
-      <!-- Input teks -->
-   
-      <!-- Tanggal Lahir input -->
 
       <!-- Informasi Pekerjaan input -->
       <!-- <label for="informasi_pekerjaan">Informasi Pekerjaan Saat Ini:</label>
