@@ -1,18 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Upload Data</title>
-  </head>
-  <body>
-    <h1>Upload Data</h1>
+<head>
 
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %} {{ user_form.as_p }} {{ personal_info_form.as_p }} {{
-      medical_info_form.as_p}} {{ biometric_data_form.as_p}}
+<link
+  rel="stylesheet"
+  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+/>
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<meta charset="UTF-8" />
+  <title>Upload Data</title>
+
+</head>
+
+<style>
+  body{
+    background-color: rgb(255, 246, 246);
+  }
+
+  .container .form-group .label {
+    font-size: 16px;
+    font-weight: 30px;
+  }
+
+  .container .btn {
+        background-color: #d9a0a0a5;
+        padding: 10px 20px;
+        border: none;
+    }
+    
+
+   .container .form-group p{
+    font-size: 16px; /* Ganti dengan ukuran font yang Anda inginkan */
+
+   } 
+</style>
+
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-9 post-content">
+         <h1>Upload Data</h1>
+<br>
+  <form method="post" enctype="multipart/form-data">
+      {% csrf_token %} 
+
+    <div class="form-group">
+      {{ user_form.as_p }}
+    
+    </div>
+    
+    <div class="form-group">
+      {{ personal_info_form.as_p }}
+    </div>
+
+    <div class="form-group">
+      {{ medical_info_form.as_p}}
+    </div>
+
+    <div class="form-group">
+      {{ biometric_data_form.as_p}}
+    </div>
+
+  <button type="button" class="btn"><strong>Submit</strong></button>
+  
+  </form>
+<br>
+    <p>Already have an account? <a href="{% url 'login' %}">Log in here</a></p>
+
+  </div>
+</div>
+</div>
+
+
+
+      <!-- {{ user_form.as_p }}  -->
+      <!-- {{ personal_info_form.as_p }} -->
+      <!-- {{ medical_info_form.as_p}} -->
+      <!-- {{ biometric_data_form.as_p}} -->
 
       <!-- Input teks -->
-
+   
       <!-- Tanggal Lahir input -->
 
       <!-- Informasi Pekerjaan input -->
@@ -46,8 +116,11 @@
       /> -->
 
       <!-- Tombol Submit -->
-      <button type="submit">Submit</button>
-    </form>
-    <p>Already have an account? <a href="{% url 'login' %}">Log in here</a></p>
+
+
   </body>
 </html>
+
+
+
+
