@@ -25,7 +25,7 @@ def validate_file_extension(value):
 class PersonalInfo(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     Full_Name = models.CharField(max_length=255)
-    Address = models.TextField(max_length=255)
+    Address = models.TextField()
     ID_Number = models.CharField(max_length=20)
     Phone = models.CharField(max_length=15)
     Email = models.EmailField()
@@ -33,7 +33,7 @@ class PersonalInfo(models.Model):
     tanggal_lahir = models.DateField()  # Kolom untuk tanggal lahir
 
     def __str__(self):
-        return self.nama
+        return self.Full_Name
 
 
 class MedicalInfo(models.Model):

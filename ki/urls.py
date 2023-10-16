@@ -1,8 +1,8 @@
-from django.urls import path
+from django.urls import path, include 
 from . import views
 
 urlpatterns = [
     path("upload_data/", views.upload_data, name="upload_data"),
-    path("login/", views.login_view, name="login"),
-    # Define URLs for other categories as needed.
+    # path("login/", ),
+    path("/", include("django.contrib.auth.urls"),views.login_view, name="login"),
 ]

@@ -24,7 +24,6 @@ class MedicalInfoForm(forms.ModelForm):
         exclude = ['user']
 
     # Additional fields for MedicalInfo
-    informasi_pekerjaan = forms.CharField(widget=forms.Textarea(attrs={'rows': 3, 'cols': 40}))
     informasi_medis_file = forms.FileField(label='Upload Medical Information', required=False, widget=forms.FileInput)
 
 class BiometricDataForm(forms.ModelForm):
