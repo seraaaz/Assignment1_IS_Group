@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from hashfunctions import cryptoHasher
-from django.contrib.auth.models import PermissionsMixin
 
 EncryptionAlgo = "ARC4"
 
@@ -13,10 +12,8 @@ class CustomUserManager(BaseUserManager):
         user = self.model(username=username)
         user.set_password(password)
         user.save()
-        
-        if (id_card_image != None):
-            hasher = cryptoHasher.Hasher()
-            user.id_card_image = hasher.encryptFile(id_card_image, EncryptionAlgo, key=user.password)
+        hasher = cryptoHasher.Hasher()
+        user.id_card_image = hasher.encryptFile(id_card_image, EncryptionAlgo, key=user.password)
         user.save()
 
         return user
@@ -29,7 +26,7 @@ class CustomUserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser):
     REQUIRED_FIELDS = ('user',)
 
     USERNAME_FIELD = 'username'
@@ -37,8 +34,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     username = models.CharField(max_length=100, unique=True)
     password = models.CharField(max_length=100)
-    is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)
     id_card_image = models.ImageField(upload_to="id_cards/")
 
     def __str__(self):
